@@ -91,23 +91,25 @@
   text-align: right;
 }
 
-/* 🔧 כאן העיצוב החדש */
+/* ✅ שינוי עיקרי: checkbox בימין, טקסט בשמאל, יישור ימין */
 .checkboxes label {
-  display: flex;
-  justify-content: flex-end;  /* מיישר לימין */
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
   gap: 10px;
+  direction: rtl;
   font-size: 15px;
-  padding: 4px 2px;
+  padding: 6px 4px;
   cursor: pointer;
   text-align: right;
   margin: 2px 0;
 }
 
+/* מוודא שהתיבה עצמה תיראה טוב */
 .checkboxes input[type="checkbox"] {
-  order: 1;  /* מציב את ה-checkbox מימין */
   margin: 0;
-  transform: scale(1.1);
+  transform: scale(1.2);
+  justify-self: start;
 }
 
 .checkboxes label:hover {
