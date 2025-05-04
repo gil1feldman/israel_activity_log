@@ -98,7 +98,6 @@
     input[type="text"],
     input[type="url"],
     input[type="datetime-local"],
-    select,
     textarea {
       width: 100%;
       padding: 10px;
@@ -114,8 +113,38 @@
       min-height: 100px;
     }
 
-    select[multiple] {
-      height: auto;
+    .custom-multiselect {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      background: white;
+      cursor: pointer;
+      position: relative;
+      user-select: none;
+      margin-top: 5px;
+    }
+
+    #selectedCategories {
+      min-height: 24px;
+    }
+
+    .checkboxes {
+      display: none;
+      position: absolute;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      width: 100%;
+      z-index: 10;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .checkboxes label {
+      display: block;
+      margin-bottom: 5px;
     }
 
     button {
@@ -186,15 +215,18 @@
       </label>
 
       <label>קטגוריה (ניתן לבחור כמה):
-        <select id="categorySelect" multiple size="7" required>
-          <option value="ביטחוני">ביטחוני</option>
-          <option value="פוליטי">פוליטי</option>
-          <option value="מדיני">מדיני</option>
-          <option value="חברתי">חברתי</option>
-          <option value="סוגיית החטופים">סוגיית החטופים</option>
-          <option value="פלילי">פלילי</option>
-          <option value="אחר">אחר</option>
-        </select>
+        <div class="custom-multiselect" onclick="toggleDropdown()">
+          <div id="selectedCategories">בחר קטגוריות...</div>
+          <div id="checkboxes" class="checkboxes">
+            <label><input type="checkbox" value="ביטחוני" onchange="updateCategory()"> ביטחוני</label>
+            <label><input type="checkbox" value="פוליטי" onchange="updateCategory()"> פוליטי</label>
+            <label><input type="checkbox" value="מדיני" onchange="updateCategory()"> מדיני</label>
+            <label><input type="checkbox" value="חברתי" onchange="updateCategory()"> חברתי</label>
+            <label><input type="checkbox" value="סוגיית החטופים" onchange="updateCategory()"> סוגיית החטופים</label>
+            <label><input type="checkbox" value="פלילי" onchange="updateCategory()"> פלילי</label>
+            <label><input type="checkbox" value="אחר" onchange="updateCategory()"> אחר</label>
+          </div>
+        </div>
       </label>
 
       <label id="otherCategoryLabel" style="display:none;">ציין קטגוריה אחרת:
@@ -225,13 +257,35 @@
   </div>
 
   <script>
-    function toggleOtherCategory(selectedValues) {
-      const otherLabel = document.getElementById('otherCategoryLabel');
-      const categoryArray = Array.from(selectedValues.options)
-        .filter(option => option.selected)
-        .map(option => option.value);
+    let expanded = false;
 
-      if (categoryArray.includes('אחר')) {
+    function toggleDropdown() {
+      const checkboxes = document.getElementById("checkboxes");
+      checkboxes.style.display = expanded ? "none" : "block";
+      expanded = !expanded;
+    }
+
+    function updateCategory() {
+      const checkboxes = document.querySelectorAll('#checkboxes input[type=checkbox]');
+      const selected = [];
+      let showOther = false;
+
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          selected.push(checkbox.value);
+          if (checkbox.value === "אחר") {
+            showOther = true;
+          }
+        }
+      });
+
+      document.getElementById('selectedCategories').innerText =
+        selected.length ? selected.join(', ') : 'בחר קטגוריות...';
+
+      document.getElementById('categoryHidden').value = selected.join(', ');
+
+      const otherLabel = document.getElementById('otherCategoryLabel');
+      if (showOther) {
         otherLabel.style.display = 'block';
       } else {
         otherLabel.style.display = 'none';
@@ -239,38 +293,33 @@
       }
     }
 
-    document.getElementById('categorySelect').addEventListener('change', function () {
-      toggleOtherCategory(this);
-    });
-
-    document.getElementById('activityForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const categorySelect = document.getElementById('categorySelect');
-      let selectedCategories = Array.from(categorySelect.selectedOptions).map(opt => opt.value);
-
-      if (selectedCategories.includes('אחר')) {
-        const otherValue = document.getElementById('otherCategoryInput').value.trim();
-        if (otherValue !== '') {
-          selectedCategories[selectedCategories.indexOf('אחר')] = otherValue;
-        }
+    // סגירת dropdown בלחיצה מחוץ
+    window.addEventListener('click', function(e) {
+      if (!e.target.closest('.custom-multiselect')) {
+        document.getElementById("checkboxes").style.display = "none";
+        expanded = false;
       }
-
-      document.getElementById('categoryHidden').value = selectedCategories.join(', ');
-
-      // כאן ניתן להוסיף fetch לשליחה בפועל
-      alert("הטופס מוכן לשליחה. קטגוריות שנבחרו:\n" + selectedCategories.join(', '));
-
-      this.reset();
-      document.getElementById('otherCategoryLabel').style.display = 'none';
     });
 
+    // סגירת מודאל בלחיצה מחוץ
     window.onclick = function(event) {
       const modal = document.getElementById('infoModal');
       if (event.target === modal) {
         modal.style.display = "none";
       }
     };
+
+    // שליחה מדומה
+    document.getElementById('activityForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert("הטופס מוכן לשליחה. נבחרו הקטגוריות: " + document.getElementById('categoryHidden').value);
+      this.reset();
+      document.getElementById('selectedCategories').innerText = 'בחר קטגוריות...';
+      document.getElementById('categoryHidden').value = '';
+      document.getElementById('otherCategoryLabel').style.display = 'none';
+      const checkboxes = document.querySelectorAll('#checkboxes input[type=checkbox]');
+      checkboxes.forEach(cb => cb.checked = false);
+    });
   </script>
 
 </body>
