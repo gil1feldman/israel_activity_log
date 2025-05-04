@@ -63,60 +63,52 @@
       box-shadow: 0 0 5px rgba(10, 61, 145, 0.3);
     }
     .custom-multiselect {
-  position: relative;
-}
-
-#selectedCategories {
-  padding: 12px 14px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background: #f9f9f9;
-  cursor: pointer;
-}
-
-.checkboxes {
-  display: none;
-  position: absolute;
-  top: 105%;
-  right: 0;
-  width: 100%;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-  max-height: 250px;
-  overflow-y: auto;
-  z-index: 999;
-  padding: 6px 8px;
-  text-align: right;
-}
-
-/* ✅ שינוי עיקרי: checkbox בימין, טקסט בשמאל, יישור ימין */
-.checkboxes label {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 10px;
-  direction: rtl;
-  font-size: 15px;
-  padding: 6px 4px;
-  cursor: pointer;
-  text-align: right;
-  margin: 2px 0;
-}
-
-/* מוודא שהתיבה עצמה תיראה טוב */
-.checkboxes input[type="checkbox"] {
-  margin: 0;
-  transform: scale(1.2);
-  justify-self: start;
-}
-
-.checkboxes label:hover {
-  background-color: #eef6ff;
-  border-radius: 6px;
-}
-
+      position: relative;
+    }
+    #selectedCategories {
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #f9f9f9;
+      cursor: pointer;
+    }
+    .checkboxes {
+      display: none;
+      position: absolute;
+      top: 105%;
+      right: 0;
+      width: 100%;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      max-height: 250px;
+      overflow-y: auto;
+      z-index: 999;
+      padding: 6px 8px;
+      text-align: right;
+    }
+    .checkboxes label {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 10px;
+      direction: rtl;
+      font-size: 15px;
+      padding: 6px 4px;
+      cursor: pointer;
+      text-align: right;
+      margin: 2px 0;
+    }
+    .checkboxes input[type="checkbox"] {
+      margin: 0;
+      transform: scale(1.2);
+      justify-self: start;
+    }
+    .checkboxes label:hover {
+      background-color: #eef6ff;
+      border-radius: 6px;
+    }
     button {
       background: linear-gradient(to right, #0A3D91, #2E8BFF);
       color: white;
@@ -186,13 +178,17 @@
       <p id="responseMessage"></p>
     </form>
   </div>
+
   <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwRjPkpZvTVCEY14hGJTYC_yhykOkEFg8Od17_D7laDJHpSSS3adlPdaFw46S6-ktE/exec";
+
     let expanded = false;
     function toggleDropdown() {
       const checkboxes = document.getElementById("checkboxes");
       checkboxes.style.display = expanded ? "none" : "block";
       expanded = !expanded;
     }
+
     function updateCategory() {
       const checkboxes = document.querySelectorAll('#checkboxes input[type=checkbox]');
       const selected = [];
@@ -216,21 +212,44 @@
         document.getElementById('otherCategoryInput').value = '';
       }
     }
+
     window.addEventListener('click', function(e) {
       if (!e.target.closest('.custom-multiselect')) {
         document.getElementById("checkboxes").style.display = "none";
         expanded = false;
       }
     });
+
     document.getElementById('activityForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      alert("הטופס מוכן לשליחה. נבחרו הקטגוריות: " + document.getElementById('categoryHidden').value);
-      this.reset();
-      document.getElementById('selectedCategories').innerText = 'בחר קטגוריות...';
-      document.getElementById('categoryHidden').value = '';
-      document.getElementById('otherCategoryLabel').style.display = 'none';
-      const checkboxes = document.querySelectorAll('#checkboxes input[type=checkbox]');
-      checkboxes.forEach(cb => cb.checked = false);
+      const form = e.target;
+      const data = {
+        description: form.description.value,
+        category: form.category.value,
+        other_category: document.getElementById("otherCategoryInput").value || '',
+        link: form.link.value,
+        submitter: form.submitter.value,
+        eventTime: form.eventTime.value,
+        comments: form.comments.value
+      };
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(response => {
+        document.getElementById('responseMessage').innerText = 'הטופס נשלח בהצלחה!';
+        form.reset();
+        document.getElementById('selectedCategories').innerText = 'בחר קטגוריות...';
+        document.getElementById('categoryHidden').value = '';
+        document.getElementById('otherCategoryLabel').style.display = 'none';
+        document.querySelectorAll('#checkboxes input[type=checkbox]').forEach(cb => cb.checked = false);
+      })
+      .catch(error => {
+        console.error('שגיאה בשליחה:', error);
+        document.getElementById('responseMessage').innerText = 'אירעה שגיאה בשליחת הטופס. נסה שוב.';
+      });
     });
   </script>
 </body>
