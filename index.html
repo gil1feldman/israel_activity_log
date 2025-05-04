@@ -114,6 +114,10 @@
       min-height: 100px;
     }
 
+    select[multiple] {
+      height: auto;
+    }
+
     button {
       width: 100%;
       margin-top: 20px;
@@ -178,12 +182,11 @@
   <div class="container">
     <form id="activityForm">
       <label>תיאור קצר של האירוע:
-        <textarea name="description" required placeholder="הקלד כאן תיאור תמציתי של האירוע..."></textarea>
+        <input type="text" name="description" required placeholder="כמה מילים על מה קרה...">
       </label>
 
-      <label>קטגוריה:
-        <select name="category" id="categorySelect" required onchange="toggleOtherCategory(this)">
-          <option value="">בחר קטגוריה...</option>
+      <label>קטגוריה (ניתן לבחור כמה):
+        <select id="categorySelect" multiple size="7" required>
           <option value="ביטחוני">ביטחוני</option>
           <option value="פוליטי">פוליטי</option>
           <option value="מדיני">מדיני</option>
@@ -195,8 +198,10 @@
       </label>
 
       <label id="otherCategoryLabel" style="display:none;">ציין קטגוריה אחרת:
-        <input type="text" name="otherCategory" placeholder="כתוב כאן את הקטגוריה...">
+        <input type="text" id="otherCategoryInput" placeholder="כתוב כאן את הקטגוריה...">
       </label>
+
+      <input type="hidden" name="category" id="categoryHidden">
 
       <label>קישור לידיעה (לא חובה):
         <input type="url" name="link" placeholder="הדבק כאן קישור (אם יש)">
@@ -220,17 +225,46 @@
   </div>
 
   <script>
-    function toggleOtherCategory(select) {
+    function toggleOtherCategory(selectedValues) {
       const otherLabel = document.getElementById('otherCategoryLabel');
-      if (select.value === 'אחר') {
+      const categoryArray = Array.from(selectedValues.options)
+        .filter(option => option.selected)
+        .map(option => option.value);
+
+      if (categoryArray.includes('אחר')) {
         otherLabel.style.display = 'block';
       } else {
         otherLabel.style.display = 'none';
-        otherLabel.querySelector('input').value = '';
+        document.getElementById('otherCategoryInput').value = '';
       }
     }
 
-    // סגירת המודאל בלחיצה על הרקע
+    document.getElementById('categorySelect').addEventListener('change', function () {
+      toggleOtherCategory(this);
+    });
+
+    document.getElementById('activityForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const categorySelect = document.getElementById('categorySelect');
+      let selectedCategories = Array.from(categorySelect.selectedOptions).map(opt => opt.value);
+
+      if (selectedCategories.includes('אחר')) {
+        const otherValue = document.getElementById('otherCategoryInput').value.trim();
+        if (otherValue !== '') {
+          selectedCategories[selectedCategories.indexOf('אחר')] = otherValue;
+        }
+      }
+
+      document.getElementById('categoryHidden').value = selectedCategories.join(', ');
+
+      // כאן ניתן להוסיף fetch לשליחה בפועל
+      alert("הטופס מוכן לשליחה. קטגוריות שנבחרו:\n" + selectedCategories.join(', '));
+
+      this.reset();
+      document.getElementById('otherCategoryLabel').style.display = 'none';
+    });
+
     window.onclick = function(event) {
       const modal = document.getElementById('infoModal');
       if (event.target === modal) {
