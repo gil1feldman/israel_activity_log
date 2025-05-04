@@ -90,9 +90,9 @@
     }
     .checkboxes label {
       display: flex;
-      flex-direction: row;
+      flex-direction: row-reverse;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: flex-start;
       gap: 10px;
       font-size: 15px;
       padding: 4px 2px;
@@ -161,10 +161,10 @@
         <input type="text" id="otherCategoryInput" placeholder="כתוב כאן את הקטגוריה...">
       </label>
       <input type="hidden" name="category" id="categoryHidden">
-      <label>קישור לידיעה (לא חובה):
+      <label>קישור לידעה (לא חובה):
         <input type="url" name="link" placeholder="הדבק כאן קישור (אם יש)">
       </label>
-      <label>שם מזין הידיעה:
+      <label>שם מזין הידעה:
         <input type="text" name="submitter" placeholder="שם או כינוי">
       </label>
       <label>זמן האירוע (אם שונה מהיום):
