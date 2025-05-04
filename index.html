@@ -5,56 +5,115 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>יומן פעילות – מדינת ישראל</title>
   <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       direction: rtl;
       background: linear-gradient(to right, #eef2f3, #8dc6ff);
-      padding: 20px;
-      margin: 0;
+      display: flex;
+      justify-content: center;
+      padding: 0 20px 20px;
     }
     .container {
       background: white;
-      padding: 40px;
+      padding: 40px 30px;
       border-radius: 18px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+      width: 100%;
       max-width: 600px;
-      margin: auto;
+      animation: fadeIn 1s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     h1 {
-      text-align: center;
       color: #0A3D91;
+      margin-bottom: 30px;
+      font-size: 26px;
+      text-align: center;
     }
     label {
+      font-size: 18px;
       font-weight: bold;
+      margin: 12px 0 8px;
       display: block;
-      margin-top: 20px;
+      color: #333;
+      text-align: right;
     }
     input, textarea {
+      display: block;
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      padding: 12px 14px;
       font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #f9f9f9;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
       box-sizing: border-box;
     }
+    input:focus, textarea:focus {
+      border-color: #0A3D91;
+      background-color: #eef6ff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(10, 61, 145, 0.3);
+    }
+    .checkboxes {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      text-align: right;
+    }
     .checkboxes label {
-      display: flex;
-      flex-direction: row-reverse;
+      display: grid;
+      grid-template-columns: auto 1fr;
       align-items: center;
       gap: 10px;
-      margin-top: 10px;
+      direction: rtl;
+      font-size: 15px;
+      padding: 6px 4px;
+      cursor: pointer;
+      margin: 2px 0;
+    }
+    .checkboxes input[type="checkbox"] {
+      margin: 0;
+      transform: scale(1.2);
+      justify-self: start;
+    }
+    .checkboxes label:hover {
+      background-color: #eef6ff;
+      border-radius: 6px;
     }
     button {
-      margin-top: 30px;
-      width: 100%;
-      padding: 12px;
-      font-size: 18px;
       background: linear-gradient(to right, #0A3D91, #2E8BFF);
       color: white;
+      padding: 14px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
+      font-size: 18px;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0A3D91;
+    }
+    #responseMessage {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+      h1 {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
@@ -63,55 +122,47 @@
     <h1>יומן פעילות – מדינת ישראל</h1>
     <form id="activityForm">
       <label>תיאור קצר של האירוע:
-        <input type="text" id="description" required>
+        <input type="text" id="description" required placeholder="כמה מילים על מה קרה...">
       </label>
-
-      <label>קטגוריות:</label>
+      <label>קטגוריה (ניתן לבחור כמה):</label>
       <div class="checkboxes">
         <label><input type="checkbox" value="ביטחוני"> ביטחוני</label>
         <label><input type="checkbox" value="פוליטי"> פוליטי</label>
         <label><input type="checkbox" value="מדיני"> מדיני</label>
         <label><input type="checkbox" value="חברתי"> חברתי</label>
-        <label><input type="checkbox" value="סוגייות החטופים"> סוגייות החטופים</label>
+        <label><input type="checkbox" value="סוגיית החטופים"> סוגיית החטופים</label>
         <label><input type="checkbox" value="פלילי"> פלילי</label>
         <label><input type="checkbox" value="אחר"> אחר</label>
       </div>
-
       <label>ציין קטגוריה אחרת:
-        <input type="text" id="otherCategory">
+        <input type="text" id="otherCategory" placeholder="כתוב כאן את הקטגוריה...">
       </label>
-
-      <label>קישור לידעה:
-        <input type="url" id="link">
+      <label>קישור לידעה (לא חובה):
+        <input type="url" id="link" placeholder="הדבק כאן קישור (אם יש)">
       </label>
-
       <label>שם מזין הידעה:
-        <input type="text" id="submitter">
+        <input type="text" id="submitter" placeholder="שם או כינוי">
       </label>
-
-      <label>זמן האירוע:
+      <label>זמן האירוע (אם שונה מהיום):
         <input type="datetime-local" id="eventTime">
       </label>
-
       <label>הערות:
-        <textarea id="comments"></textarea>
+        <textarea id="comments" placeholder="פרטים נוספים, פרשנות, מקורות וכו'..."></textarea>
       </label>
-
       <button type="button" onclick="submitForm()">שלח</button>
       <p id="responseMessage"></p>
     </form>
   </div>
-
   <script>
     function submitForm() {
-      const description = document.getElementById("description").value;
+      const description = document.getElementById("description").value.trim();
       const checkboxes = document.querySelectorAll(".checkboxes input[type='checkbox']");
       const selectedCategories = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-      const otherCategory = document.getElementById("otherCategory").value;
-      const link = document.getElementById("link").value;
-      const submitter = document.getElementById("submitter").value;
+      const otherCategory = document.getElementById("otherCategory").value.trim();
+      const link = document.getElementById("link").value.trim();
+      const submitter = document.getElementById("submitter").value.trim();
       const eventTime = document.getElementById("eventTime").value;
-      const comments = document.getElementById("comments").value;
+      const comments = document.getElementById("comments").value.trim();
 
       fetch("https://script.google.com/macros/s/AKfycbwRjPkpZvTVCEY14hGJTYC_yhykOkEFg8Od17_D7laDJHpSSS3adlPdaFw46S6-ktE/exec", {
         method: "POST",
@@ -138,7 +189,7 @@
       })
       .catch(error => {
         console.error("Error:", error);
-        document.getElementById("responseMessage").innerText = "שגיאה בשלי9. נסה שוב.";
+        document.getElementById("responseMessage").innerText = "שגיאה בשליחה. נסה שוב.";
       });
     }
   </script>
