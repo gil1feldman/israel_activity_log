@@ -89,6 +89,7 @@
     }
     .checkboxes label {
       display: flex;
+      justify-content: flex-end;
       align-items: center;
       gap: 8px;
       font-size: 16px;
@@ -139,13 +140,13 @@
       <div class="custom-multiselect">
         <div id="selectedCategories" onclick="toggleDropdown()">בחר קטגוריות...</div>
         <div id="checkboxes" class="checkboxes">
-          <label><input type="checkbox" value="ביטחוני" onchange="updateCategory()"> ביטחוני</label>
-          <label><input type="checkbox" value="פוליטי" onchange="updateCategory()"> פוליטי</label>
-          <label><input type="checkbox" value="מדיני" onchange="updateCategory()"> מדיני</label>
-          <label><input type="checkbox" value="חברתי" onchange="updateCategory()"> חברתי</label>
-          <label><input type="checkbox" value="סוגיית החטופים" onchange="updateCategory()"> סוגיית החטופים</label>
-          <label><input type="checkbox" value="פלילי" onchange="updateCategory()"> פלילי</label>
-          <label><input type="checkbox" value="אחר" onchange="updateCategory()"> אחר</label>
+          <label><input type="checkbox" value="ביטחוני" onchange="updateCategory()">ביטחוני</label>
+          <label><input type="checkbox" value="פוליטי" onchange="updateCategory()">פוליטי</label>
+          <label><input type="checkbox" value="מדיני" onchange="updateCategory()">מדיני</label>
+          <label><input type="checkbox" value="חברתי" onchange="updateCategory()">חברתי</label>
+          <label><input type="checkbox" value="סוגיית החטופים" onchange="updateCategory()">סוגיית החטופים</label>
+          <label><input type="checkbox" value="פלילי" onchange="updateCategory()">פלילי</label>
+          <label><input type="checkbox" value="אחר" onchange="updateCategory()">אחר</label>
         </div>
       </div>
       <label id="otherCategoryLabel" style="display:none;">ציין קטגוריה אחרת:
