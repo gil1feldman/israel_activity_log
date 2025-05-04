@@ -5,215 +5,131 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>יומן פעילות – מדינת ישראל</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      direction: rtl;
-      background: #f9f9f9;
-      padding: 0;
+    html, body {
       margin: 0;
+      padding: 0;
     }
-
-    .banner {
-      background-color: #003366;
-      color: white;
-      padding: 10px 20px;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      direction: rtl;
+      background: linear-gradient(to right, #eef2f3, #8dc6ff);
+      display: flex;
+      justify-content: center;
+      padding: 0 20px 20px;
+    }
+    .container {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+      width: 100%;
+      max-width: 600px;
+      animation: fadeIn 1s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      color: #0A3D91;
+      margin-bottom: 30px;
+      font-size: 26px;
       text-align: center;
-      border-radius: 0 0 12px 12px;
-      position: relative;
     }
-
-    .banner h1 {
-      font-size: 20px;
-      margin: 5px 0 0 0;
-    }
-
-    .info-button {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 26px;
-      height: 26px;
-      background-color: #00aaff;
-      color: white;
+    label {
       font-size: 18px;
       font-weight: bold;
-      border-radius: 6px;
-      text-align: center;
-      line-height: 26px;
-      cursor: pointer;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      right: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-      direction: rtl;
-      font-size: 16px;
-      line-height: 1.6;
-    }
-
-    .close {
-      float: left;
-      font-size: 24px;
-      font-weight: bold;
-      color: #888;
-      cursor: pointer;
-    }
-
-    .container {
-      padding: 20px;
-      width: 90%;
-      max-width: 700px;
-      margin: auto;
-    }
-
-    form {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    label {
+      margin: 12px 0 8px;
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
+      color: #333;
+      text-align: right;
     }
-
-    input[type="text"],
-    input[type="url"],
-    input[type="datetime-local"],
-    textarea {
+    input, select, textarea {
+      display: block;
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
+      padding: 12px 14px;
       font-size: 16px;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .custom-multiselect {
       border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 10px;
-      background: white;
-      cursor: pointer;
+      border-radius: 10px;
+      background: #f9f9f9;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #0A3D91;
+      background-color: #eef6ff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(10, 61, 145, 0.3);
+    }
+    .custom-multiselect {
       position: relative;
-      user-select: none;
-      margin-top: 5px;
+      cursor: pointer;
     }
-
     #selectedCategories {
-      min-height: 24px;
+      min-height: 20px;
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #f9f9f9;
+      margin-bottom: 10px;
     }
-
     .checkboxes {
       display: none;
       position: absolute;
       background: white;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 10px;
+      border-radius: 10px;
       width: 100%;
-      z-index: 10;
       box-shadow: 0 2px 10px rgba(0,0,0,0.15);
       max-height: 200px;
       overflow-y: auto;
+      z-index: 999;
     }
-
     .checkboxes label {
       display: block;
-      margin-bottom: 5px;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 12px;
-      background-color: #003366;
-      color: white;
-      border: none;
-      border-radius: 6px;
+      padding: 8px;
       cursor: pointer;
-      font-size: 16px;
     }
-
+    .checkboxes label:hover {
+      background-color: #eef6ff;
+    }
+    button {
+      background: linear-gradient(to right, #0A3D91, #2E8BFF);
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
     button:hover {
-      background-color: #002855;
+      background: #0A3D91;
     }
-
     #responseMessage {
       margin-top: 20px;
       font-weight: bold;
       text-align: center;
     }
-
     @media (max-width: 480px) {
-      .banner h1 {
-        font-size: 16px;
+      .container {
+        padding: 30px 20px;
       }
-
-      .info-button {
-        top: 8px;
-        left: 8px;
-        width: 24px;
-        height: 24px;
-        font-size: 16px;
-        line-height: 24px;
-      }
-
-      input, select, textarea, button {
-        font-size: 14px;
+      h1 {
+        font-size: 22px;
       }
     }
   </style>
 </head>
 <body>
-
-  <div class="banner">
-    <div class="info-button" onclick="document.getElementById('infoModal').style.display='block'">i</div>
-    <h1>יומן פעילות – מדינת ישראל</h1>
-  </div>
-
-  <!-- חלון מידע -->
-  <div id="infoModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="document.getElementById('infoModal').style.display='none'">✖</span>
-      <h3>ℹ️ איך ממלאים?</h3>
-      <p>1. <strong>תארו את האירוע בקצרה</strong></p>
-      <p>2. <strong>בחרו קטגוריה</strong> מתאימה (או "אחר" ואז כתבו)</p>
-      <p>3. <strong>הדביקו קישור</strong> אם יש</p>
-      <p>4. <strong>הוסיפו שם, תאריך והערות</strong> לפי הצורך</p>
-    </div>
-  </div>
-
   <div class="container">
+    <h1>יומן פעילות – מדינת ישראל</h1>
     <form id="activityForm">
       <label>תיאור קצר של האירוע:
         <input type="text" name="description" required placeholder="כמה מילים על מה קרה...">
       </label>
-
       <label>קטגוריה (ניתן לבחור כמה):
         <div class="custom-multiselect" onclick="toggleDropdown()">
           <div id="selectedCategories">בחר קטגוריות...</div>
@@ -228,48 +144,37 @@
           </div>
         </div>
       </label>
-
       <label id="otherCategoryLabel" style="display:none;">ציין קטגוריה אחרת:
         <input type="text" id="otherCategoryInput" placeholder="כתוב כאן את הקטגוריה...">
       </label>
-
       <input type="hidden" name="category" id="categoryHidden">
-
       <label>קישור לידיעה (לא חובה):
         <input type="url" name="link" placeholder="הדבק כאן קישור (אם יש)">
       </label>
-
       <label>שם מזין הידיעה:
         <input type="text" name="submitter" placeholder="שם או כינוי">
       </label>
-
       <label>זמן האירוע (אם שונה מהיום):
         <input type="datetime-local" name="eventTime">
       </label>
-
       <label>הערות:
         <textarea name="comments" placeholder="פרטים נוספים, פרשנות, מקורות וכו'..."></textarea>
       </label>
-
       <button type="submit">שלח</button>
       <p id="responseMessage"></p>
     </form>
   </div>
-
   <script>
     let expanded = false;
-
     function toggleDropdown() {
       const checkboxes = document.getElementById("checkboxes");
       checkboxes.style.display = expanded ? "none" : "block";
       expanded = !expanded;
     }
-
     function updateCategory() {
       const checkboxes = document.querySelectorAll('#checkboxes input[type=checkbox]');
       const selected = [];
       let showOther = false;
-
       checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
           selected.push(checkbox.value);
@@ -278,12 +183,9 @@
           }
         }
       });
-
       document.getElementById('selectedCategories').innerText =
         selected.length ? selected.join(', ') : 'בחר קטגוריות...';
-
       document.getElementById('categoryHidden').value = selected.join(', ');
-
       const otherLabel = document.getElementById('otherCategoryLabel');
       if (showOther) {
         otherLabel.style.display = 'block';
@@ -292,24 +194,12 @@
         document.getElementById('otherCategoryInput').value = '';
       }
     }
-
-    // סגירת dropdown בלחיצה מחוץ
     window.addEventListener('click', function(e) {
       if (!e.target.closest('.custom-multiselect')) {
         document.getElementById("checkboxes").style.display = "none";
         expanded = false;
       }
     });
-
-    // סגירת מודאל בלחיצה מחוץ
-    window.onclick = function(event) {
-      const modal = document.getElementById('infoModal');
-      if (event.target === modal) {
-        modal.style.display = "none";
-      }
-    };
-
-    // שליחה מדומה
     document.getElementById('activityForm').addEventListener('submit', function(e) {
       e.preventDefault();
       alert("הטופס מוכן לשליחה. נבחרו הקטגוריות: " + document.getElementById('categoryHidden').value);
@@ -321,6 +211,5 @@
       checkboxes.forEach(cb => cb.checked = false);
     });
   </script>
-
 </body>
 </html>
