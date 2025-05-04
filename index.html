@@ -64,37 +64,40 @@
     }
     .custom-multiselect {
       position: relative;
-      cursor: pointer;
     }
     #selectedCategories {
-      min-height: 20px;
       padding: 12px 14px;
       border: 1px solid #ccc;
       border-radius: 10px;
       background: #f9f9f9;
-      margin-bottom: 10px;
+      cursor: pointer;
     }
     .checkboxes {
       display: none;
       position: absolute;
-      top: 100%;
-      left: 0;
+      top: 105%;
+      right: 0;
+      width: 100%;
       background: white;
       border: 1px solid #ccc;
       border-radius: 10px;
-      width: 100%;
       box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-      max-height: 200px;
+      max-height: 250px;
       overflow-y: auto;
       z-index: 999;
+      padding: 10px;
     }
     .checkboxes label {
-      display: block;
-      padding: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      padding: 6px 4px;
       cursor: pointer;
     }
     .checkboxes label:hover {
       background-color: #eef6ff;
+      border-radius: 6px;
     }
     button {
       background: linear-gradient(to right, #0A3D91, #2E8BFF);
