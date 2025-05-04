@@ -207,26 +207,21 @@
       const eventTime = document.getElementById("eventTime").value;
       const comments = document.getElementById("comments").value.trim();
 
+      const formData = new FormData();
+      formData.append("description", description);
+      formData.append("category", selectedCategories.join(", "));
+      formData.append("other_category", otherCategory);
+      formData.append("link", link);
+      formData.append("submitter", submitter);
+      formData.append("eventTime", eventTime);
+      formData.append("comments", comments);
+
       fetch("https://script.google.com/macros/s/AKfycbwRjPkpZvTVCEY14hGJTYC_yhykOkEFg8Od17_D7laDJHpSSS3adlPdaFw46S6-ktE/exec", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          description,
-          category: selectedCategories,
-          other_category: otherCategory,
-          link,
-          submitter,
-          eventTime,
-          comments
-        })
+        body: formData,
+        mode: "no-cors"
       })
-      .then(res => {
-        if (!res.ok) throw new Error("Network response was not ok");
-        return res.text();
-      })
-      .then(response => {
+      .then(() => {
         document.getElementById("responseMessage").innerText = "הטופס נשלח בהצלחה!";
         document.getElementById("activityForm").reset();
         document.getElementById("selectedCategories").innerText = "בחר קטגוריות...";
