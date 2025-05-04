@@ -77,6 +77,8 @@
     .checkboxes {
       display: none;
       position: absolute;
+      top: 100%;
+      left: 0;
       background: white;
       border: 1px solid #ccc;
       border-radius: 10px;
@@ -130,20 +132,19 @@
       <label>תיאור קצר של האירוע:
         <input type="text" name="description" required placeholder="כמה מילים על מה קרה...">
       </label>
-      <label>קטגוריה (ניתן לבחור כמה):
-        <div class="custom-multiselect" onclick="toggleDropdown()">
-          <div id="selectedCategories">בחר קטגוריות...</div>
-          <div id="checkboxes" class="checkboxes">
-            <label><input type="checkbox" value="ביטחוני" onchange="updateCategory()"> ביטחוני</label>
-            <label><input type="checkbox" value="פוליטי" onchange="updateCategory()"> פוליטי</label>
-            <label><input type="checkbox" value="מדיני" onchange="updateCategory()"> מדיני</label>
-            <label><input type="checkbox" value="חברתי" onchange="updateCategory()"> חברתי</label>
-            <label><input type="checkbox" value="סוגיית החטופים" onchange="updateCategory()"> סוגיית החטופים</label>
-            <label><input type="checkbox" value="פלילי" onchange="updateCategory()"> פלילי</label>
-            <label><input type="checkbox" value="אחר" onchange="updateCategory()"> אחר</label>
-          </div>
+      <label>קטגוריה (ניתן לבחור כמה):</label>
+      <div class="custom-multiselect">
+        <div id="selectedCategories" onclick="toggleDropdown()">בחר קטגוריות...</div>
+        <div id="checkboxes" class="checkboxes">
+          <label><input type="checkbox" value="ביטחוני" onchange="updateCategory()"> ביטחוני</label>
+          <label><input type="checkbox" value="פוליטי" onchange="updateCategory()"> פוליטי</label>
+          <label><input type="checkbox" value="מדיני" onchange="updateCategory()"> מדיני</label>
+          <label><input type="checkbox" value="חברתי" onchange="updateCategory()"> חברתי</label>
+          <label><input type="checkbox" value="סוגיית החטופים" onchange="updateCategory()"> סוגיית החטופים</label>
+          <label><input type="checkbox" value="פלילי" onchange="updateCategory()"> פלילי</label>
+          <label><input type="checkbox" value="אחר" onchange="updateCategory()"> אחר</label>
         </div>
-      </label>
+      </div>
       <label id="otherCategoryLabel" style="display:none;">ציין קטגוריה אחרת:
         <input type="text" id="otherCategoryInput" placeholder="כתוב כאן את הקטגוריה...">
       </label>
