@@ -223,20 +223,19 @@
     document.getElementById('activityForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const form = e.target;
-      const data = {
-        description: form.description.value,
-        category: form.category.value,
-        other_category: document.getElementById("otherCategoryInput").value || '',
-        link: form.link.value,
-        submitter: form.submitter.value,
-        eventTime: form.eventTime.value,
-        comments: form.comments.value
-      };
+
+      const formData = new FormData();
+      formData.append("description", form.description.value);
+      formData.append("category", form.category.value);
+      formData.append("other_category", document.getElementById("otherCategoryInput").value || '');
+      formData.append("link", form.link.value);
+      formData.append("submitter", form.submitter.value);
+      formData.append("eventTime", form.eventTime.value);
+      formData.append("comments", form.comments.value);
 
       fetch(scriptURL, {
         method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' }
+        body: formData
       })
       .then(response => {
         document.getElementById('responseMessage').innerText = 'הטופס נשלח בהצלחה!';
