@@ -5,136 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>יומן פעילות – מדינת ישראל</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-    }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       direction: rtl;
       background: linear-gradient(to right, #eef2f3, #8dc6ff);
-      display: flex;
-      justify-content: center;
-      padding: 0 20px 20px;
+      padding: 20px;
+      margin: 0;
     }
     .container {
       background: white;
-      padding: 40px 30px;
+      padding: 40px;
       border-radius: 18px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-      width: 100%;
       max-width: 600px;
-      animation: fadeIn 1s ease forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      margin: auto;
     }
     h1 {
-      color: #0A3D91;
-      margin-bottom: 30px;
-      font-size: 26px;
       text-align: center;
+      color: #0A3D91;
     }
     label {
-      font-size: 18px;
       font-weight: bold;
-      margin: 12px 0 8px;
       display: block;
-      color: #333;
-      text-align: right;
+      margin-top: 20px;
     }
-    input, select, textarea {
-      display: block;
+    input, textarea {
       width: 100%;
-      padding: 12px 14px;
-      font-size: 16px;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
       border: 1px solid #ccc;
-      border-radius: 10px;
-      background: #f9f9f9;
-      transition: all 0.3s ease;
-      margin-bottom: 20px;
+      font-size: 16px;
       box-sizing: border-box;
     }
-    input:focus, select:focus, textarea:focus {
-      border-color: #0A3D91;
-      background-color: #eef6ff;
-      outline: none;
-      box-shadow: 0 0 5px rgba(10, 61, 145, 0.3);
-    }
-    .custom-multiselect {
-      position: relative;
-    }
-    #selectedCategories {
-      padding: 12px 14px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      background: #f9f9f9;
-      cursor: pointer;
-    }
-    .checkboxes {
-      display: none;
-      position: absolute;
-      top: 105%;
-      right: 0;
-      width: 100%;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-      max-height: 250px;
-      overflow-y: auto;
-      z-index: 999;
-      padding: 6px 8px;
-      text-align: right;
-    }
     .checkboxes label {
-      display: grid;
-      grid-template-columns: auto 1fr;
+      display: flex;
+      flex-direction: row-reverse;
       align-items: center;
       gap: 10px;
-      direction: rtl;
-      font-size: 15px;
-      padding: 6px 4px;
-      cursor: pointer;
-      text-align: right;
-      margin: 2px 0;
-    }
-    .checkboxes input[type="checkbox"] {
-      margin: 0;
-      transform: scale(1.2);
-      justify-self: start;
-    }
-    .checkboxes label:hover {
-      background-color: #eef6ff;
-      border-radius: 6px;
+      margin-top: 10px;
     }
     button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
       background: linear-gradient(to right, #0A3D91, #2E8BFF);
       color: white;
-      padding: 14px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 18px;
-      width: 100%;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background: #0A3D91;
-    }
-    #responseMessage {
-      margin-top: 20px;
-      font-weight: bold;
-      text-align: center;
-    }
-    @media (max-width: 480px) {
-      .container {
-        padding: 30px 20px;
-      }
-      h1 {
-        font-size: 22px;
-      }
     }
   </style>
 </head>
@@ -143,114 +63,84 @@
     <h1>יומן פעילות – מדינת ישראל</h1>
     <form id="activityForm">
       <label>תיאור קצר של האירוע:
-        <input type="text" name="description" required placeholder="כמה מילים על מה קרה...">
+        <input type="text" id="description" required>
       </label>
-      <label>קטגוריה (ניתן לבחור כמה):</label>
-      <div class="custom-multiselect">
-        <div id="selectedCategories" onclick="toggleDropdown()">בחר קטגוריות...</div>
-        <div id="checkboxes" class="checkboxes">
-          <label><input type="checkbox" value="ביטחוני" onchange="updateCategory()">ביטחוני</label>
-          <label><input type="checkbox" value="פוליטי" onchange="updateCategory()">פוליטי</label>
-          <label><input type="checkbox" value="מדיני" onchange="updateCategory()">מדיני</label>
-          <label><input type="checkbox" value="חברתי" onchange="updateCategory()">חברתי</label>
-          <label><input type="checkbox" value="סוגיית החטופים" onchange="updateCategory()">סוגיית החטופים</label>
-          <label><input type="checkbox" value="פלילי" onchange="updateCategory()">פלילי</label>
-          <label><input type="checkbox" value="אחר" onchange="updateCategory()">אחר</label>
-        </div>
+
+      <label>קטגוריות:</label>
+      <div class="checkboxes">
+        <label><input type="checkbox" value="ביטחוני"> ביטחוני</label>
+        <label><input type="checkbox" value="פוליטי"> פוליטי</label>
+        <label><input type="checkbox" value="מדיני"> מדיני</label>
+        <label><input type="checkbox" value="חברתי"> חברתי</label>
+        <label><input type="checkbox" value="סוגייות החטופים"> סוגייות החטופים</label>
+        <label><input type="checkbox" value="פלילי"> פלילי</label>
+        <label><input type="checkbox" value="אחר"> אחר</label>
       </div>
-      <label id="otherCategoryLabel" style="display:none;">ציין קטגוריה אחרת:
-        <input type="text" id="otherCategoryInput" placeholder="כתוב כאן את הקטגוריה...">
+
+      <label>ציין קטגוריה אחרת:
+        <input type="text" id="otherCategory">
       </label>
-      <input type="hidden" name="category" id="categoryHidden">
-      <label>קישור לידעה (לא חובה):
-        <input type="url" name="link" placeholder="הדבק כאן קישור (אם יש)">
+
+      <label>קישור לידעה:
+        <input type="url" id="link">
       </label>
+
       <label>שם מזין הידעה:
-        <input type="text" name="submitter" placeholder="שם או כינוי">
+        <input type="text" id="submitter">
       </label>
-      <label>זמן האירוע (אם שונה מהיום):
-        <input type="datetime-local" name="eventTime">
+
+      <label>זמן האירוע:
+        <input type="datetime-local" id="eventTime">
       </label>
+
       <label>הערות:
-        <textarea name="comments" placeholder="פרטים נוספים, פרשנות, מקורות וכו'..."></textarea>
+        <textarea id="comments"></textarea>
       </label>
-      <button type="submit">שלח</button>
+
+      <button type="button" onclick="submitForm()">שלח</button>
       <p id="responseMessage"></p>
     </form>
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwRjPkpZvTVCEY14hGJTYC_yhykOkEFg8Od17_D7laDJHpSSS3adlPdaFw46S6-ktE/exec";
+    function submitForm() {
+      const description = document.getElementById("description").value;
+      const checkboxes = document.querySelectorAll(".checkboxes input[type='checkbox']");
+      const selectedCategories = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+      const otherCategory = document.getElementById("otherCategory").value;
+      const link = document.getElementById("link").value;
+      const submitter = document.getElementById("submitter").value;
+      const eventTime = document.getElementById("eventTime").value;
+      const comments = document.getElementById("comments").value;
 
-    let expanded = false;
-    function toggleDropdown() {
-      const checkboxes = document.getElementById("checkboxes");
-      checkboxes.style.display = expanded ? "none" : "block";
-      expanded = !expanded;
-    }
-
-    function updateCategory() {
-      const checkboxes = document.querySelectorAll('#checkboxes input[type=checkbox]');
-      const selected = [];
-      let showOther = false;
-      checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-          selected.push(checkbox.value);
-          if (checkbox.value === "אחר") {
-            showOther = true;
-          }
-        }
-      });
-      document.getElementById('selectedCategories').innerText =
-        selected.length ? selected.join(', ') : 'בחר קטגוריות...';
-      document.getElementById('categoryHidden').value = selected.join(', ');
-      const otherLabel = document.getElementById('otherCategoryLabel');
-      if (showOther) {
-        otherLabel.style.display = 'block';
-      } else {
-        otherLabel.style.display = 'none';
-        document.getElementById('otherCategoryInput').value = '';
-      }
-    }
-
-    window.addEventListener('click', function(e) {
-      if (!e.target.closest('.custom-multiselect')) {
-        document.getElementById("checkboxes").style.display = "none";
-        expanded = false;
-      }
-    });
-
-    document.getElementById('activityForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const form = e.target;
-
-      const formData = new FormData();
-      formData.append("description", form.description.value);
-      formData.append("category", form.category.value);
-      formData.append("other_category", document.getElementById("otherCategoryInput").value || '');
-      formData.append("link", form.link.value);
-      formData.append("submitter", form.submitter.value);
-      formData.append("eventTime", form.eventTime.value);
-      formData.append("comments", form.comments.value);
-
-      fetch(scriptURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: formData
+      fetch("https://script.google.com/macros/s/AKfycbwRjPkpZvTVCEY14hGJTYC_yhykOkEFg8Od17_D7laDJHpSSS3adlPdaFw46S6-ktE/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          description,
+          category: selectedCategories,
+          other_category: otherCategory,
+          link,
+          submitter,
+          eventTime,
+          comments
+        })
       })
-      .then(() => {
-        document.getElementById('responseMessage').innerText = 'הטופס נשלח בהצלחה!';
-        form.reset();
-        document.getElementById('selectedCategories').innerText = 'בחר קטגוריות...';
-        document.getElementById('categoryHidden').value = '';
-        document.getElementById('otherCategoryLabel').style.display = 'none';
-        document.querySelectorAll('#checkboxes input[type=checkbox]').forEach(cb => cb.checked = false);
+      .then(res => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.text();
+      })
+      .then(response => {
+        document.getElementById("responseMessage").innerText = "הטופס נשלח בהצלחה!";
+        document.getElementById("activityForm").reset();
       })
       .catch(error => {
-        console.error('שגיאה בשליחה:', error);
-        document.getElementById('responseMessage').innerText = 'אירעה שגיאה בשליחת הטופס. נסה שוב.';
+        console.error("Error:", error);
+        document.getElementById("responseMessage").innerText = "שגיאה בשלי9. נסה שוב.";
       });
-    });
+    }
   </script>
 </body>
 </html>
