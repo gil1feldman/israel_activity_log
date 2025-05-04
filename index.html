@@ -235,9 +235,10 @@
 
       fetch(scriptURL, {
         method: 'POST',
+        mode: 'no-cors',
         body: formData
       })
-      .then(response => {
+      .then(() => {
         document.getElementById('responseMessage').innerText = 'הטופס נשלח בהצלחה!';
         form.reset();
         document.getElementById('selectedCategories').innerText = 'בחר קטגוריות...';
